@@ -1,8 +1,8 @@
 # rfct device-message-adapter
 ## need to add .env file with the following
-MQTTPUBLISHTOPIC=maxiv\/r3-rfct\/reading<br/>
-MQTTSUBSCRIBETOPIC=maxiv\/r3-rfct\/setting<br/>
-MQTTCLIENTID=r3-rfct-dma<br/>
+MQTTPUBLISHTOPIC=seahouse\/temp-mon-01\/reading<br/>
+MQTTSUBSCRIBETOPIC=seahouse\/temp-mon-01\/setting<br/>
+MQTTCLIENTID=temp-mon-01-dma<br/>
 MQTTSERVERIP=broker.shiftr.io<br/>
 MQTTUSERNAME=xxxxxxxx<br/>
 MQTTPASSWORD=xxxxxxxx<br/>
