@@ -255,7 +255,7 @@
         "type": "function",
         "z": "5f562f66.a301e",
         "name": "Save initSettings in Memory",
-        "func": "flow.set('device', msg.payload);\nreturn msg;",
+        "func": "flow.set('resetInProgress',false);\nflow.set('device', msg.payload);\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "x": 720,
@@ -271,8 +271,8 @@
         "type": "function",
         "z": "5f562f66.a301e",
         "name": "Parse Reading Byte Array",
-        "func": "function getAttrObject(device, propName, attrName)\n{\n    var props = device[propName];\n    var attr = props.find(attr => attr.attr === attrName);\n    return attr;\n}\nvar device = flow.get('device');\n\nvar tempAAttr       = getAttrObject(device, 'readings', 'temp-A');\nvar tempBAttr       = getAttrObject(device, 'readings', 'temp-B');\nvar linkQualityAttr = getAttrObject(device, 'readings', 'linkQuality');\nvar signalLevelAttr = getAttrObject(device, 'readings', 'signalLevel');\n\nvar tempAid = getAttrObject(device, 'settings', 'temp-A-id').value;\nvar tempBid = getAttrObject(device, 'settings', 'temp-B-id').value;\nfor (var ii = 0; ii < msg.payload.length; ++ii)\n{\n    if (msg.payload[ii].id == tempAid)\n    {\n        tempAAttr.value = msg.payload[ii].temp;\n    }\n    if (msg.payload[ii].id == tempBid)\n    {\n        tempBAttr.value = msg.payload[ii].temp;\n    }\n}\n\nlinkQualityAttr.value = flow.get('linkQuality');\nsignalLevelAttr.value = flow.get('signalLevel');\n\nvar blueLedValue = context.get('blueLedValue');\nif (blueLedValue == undefined) blueLedValue = 1;\nif (blueLedValue == 0)\n{\n    blueLedValue = 1; \n}\nelse\n{\n    blueLedValue = 0;\n}\ncontext.set('blueLedValue', blueLedValue);\n\nreturn [{topic : 'reading', payload : device}, {topic : 'blueLed', payload : blueLedValue}, {topic : '', payload : 1}];\n",
-        "outputs": 3,
+        "func": "function getAttrObject(device, propName, attrName)\n{\n    var props = device[propName];\n    var attr = props.find(attr => attr.attr === attrName);\n    return attr;\n}\nvar device = flow.get('device');\n\nvar tempAAttr       = getAttrObject(device, 'readings', 'temp-A');\nvar tempBAttr       = getAttrObject(device, 'readings', 'temp-B');\nvar linkQualityAttr = getAttrObject(device, 'readings', 'linkQuality');\nvar signalLevelAttr = getAttrObject(device, 'readings', 'signalLevel');\n\nvar tempAid = getAttrObject(device, 'settings', 'temp-A-id').value;\nvar tempBid = getAttrObject(device, 'settings', 'temp-B-id').value;\ntempAAttr.value = -100.0;\ntempBAttr.value = -100.0;\nfor (var ii = 0; ii < msg.payload.length; ++ii)\n{\n    if (msg.payload[ii].id == tempAid)\n    {\n        tempAAttr.value = msg.payload[ii].temp;\n    }\n    if (msg.payload[ii].id == tempBid)\n    {\n        tempBAttr.value = msg.payload[ii].temp;\n    }\n}\n\nlinkQualityAttr.value = flow.get('linkQuality');\nsignalLevelAttr.value = flow.get('signalLevel');\n\nvar blueLedValue = context.get('blueLedValue');\nif (blueLedValue == undefined) blueLedValue = 1;\nif (blueLedValue == 0)\n{\n    blueLedValue = 1; \n}\nelse\n{\n    blueLedValue = 0;\n}\nvar deviceMessage = {topic : 'reading', payload : device};\nvar resetMessage = null;\nif ((msg.payload.length != 2) || (tempAAttr.value < -99.0) || (tempBAttr.value < -99.0)) \n{\n    blueLedValue = 0;\n    deviceMessage = null;\n    if (!flow.get('resetInProgress')) resetMessage = {topic : 'resetOneWire', payload : 1};\n}\ncontext.set('blueLedValue', blueLedValue);\n\n\nreturn [deviceMessage, {topic : 'blueLed', payload : blueLedValue}, {topic : '', payload : 1}, resetMessage];\n",
+        "outputs": 4,
         "noerr": 0,
         "x": 570,
         "y": 440,
@@ -285,6 +285,10 @@
             ],
             [
                 "12856bbc.b69924"
+            ],
+            [
+                "cbf54b7.b4fdfb8",
+                "7fbb0296.3630ac"
             ]
         ]
     },
@@ -444,5 +448,133 @@
         "x": 840,
         "y": 480,
         "wires": []
+    },
+    {
+        "id": "b6a64bd5.3bd8b8",
+        "type": "rpi-gpio out",
+        "z": "5f562f66.a301e",
+        "name": "One Wire Power",
+        "pin": "13",
+        "set": true,
+        "level": "1",
+        "freq": "",
+        "out": "out",
+        "x": 1040,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "26c7a2ad.9c0d8e",
+        "type": "function",
+        "z": "5f562f66.a301e",
+        "name": "Turn On",
+        "func": "return {topic:'reset',payload:1};",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 860,
+        "y": 620,
+        "wires": [
+            [
+                "b6a64bd5.3bd8b8",
+                "d6bfb4a9.1c6358"
+            ]
+        ]
+    },
+    {
+        "id": "7fbb0296.3630ac",
+        "type": "function",
+        "z": "5f562f66.a301e",
+        "name": "Turn Off",
+        "func": "flow.set('resetInProgress',true);\nreturn {topic:'reset',payload:0};",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 860,
+        "y": 680,
+        "wires": [
+            [
+                "b6a64bd5.3bd8b8"
+            ]
+        ]
+    },
+    {
+        "id": "cbf54b7.b4fdfb8",
+        "type": "delay",
+        "z": "5f562f66.a301e",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "20",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 700,
+        "y": 620,
+        "wires": [
+            [
+                "26c7a2ad.9c0d8e"
+            ]
+        ]
+    },
+    {
+        "id": "d6bfb4a9.1c6358",
+        "type": "delay",
+        "z": "5f562f66.a301e",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "20",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 1020,
+        "y": 560,
+        "wires": [
+            [
+                "373610f3.8eb65"
+            ]
+        ]
+    },
+    {
+        "id": "373610f3.8eb65",
+        "type": "function",
+        "z": "5f562f66.a301e",
+        "name": "resetInProgress false",
+        "func": "flow.set('resetInProgress',false);\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1220,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b5c46e7b.e64ee",
+        "type": "inject",
+        "z": "5f562f66.a301e",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 540,
+        "y": 680,
+        "wires": [
+            [
+                "cbf54b7.b4fdfb8",
+                "7fbb0296.3630ac"
+            ]
+        ]
     }
 ]
