@@ -1,1 +1,101 @@
-{"name":"temp-mon-01","arcPeriod":60000,"timeStamp":1568306817479,"lastArchive":1568306777236,"readings":[{"attr":"temp-A","type":"scalar","value":35.375,"unit":"C","alarm":{"value":0,"limits":{"lolo":5,"low":10,"high":50,"hihi":55},"notify":{"name":"David McGinnis","number":"46725722472","time":0}}},{"attr":"temp-B","type":"scalar","value":45.937,"unit":"C","alarm":{"value":0,"limits":{"lolo":10,"low":15,"high":70,"hihi":75},"notify":{"name":"Dave","number":"46725722472","time":0}}},{"attr":"linkQuality","type":"scalar","value":62,"unit":"/70","alarm":{"value":0,"limits":{"lolo":30,"low":40,"high":71,"hihi":80},"notify":{"name":"","number":"","time":0}}},{"attr":"signalLevel","type":"scalar","value":-48,"unit":"dBm","alarm":{"value":0,"limits":{"lolo":-70,"low":-60,"high":0,"hihi":30},"notify":{"name":"","number":"","time":0}}}],"settings":[{"attr":"temp-A-id","type":"string","value":"CAC979971003"},{"attr":"temp-B-id","type":"string","value":"97F579971003"}]}
+{
+  "deviceType": "temp-mon",
+  "name": "03",
+  "arcPeriod": 60000,
+  "timeStamp": 1575123127321,
+  "lastArchive": 1575123075914,
+  "readings": [
+    {
+      "attr": "temp-A",
+      "type": "scalar",
+      "value": 10.812,
+      "unit": "C",
+      "alarm": {
+        "value": 0,
+        "limits": {
+          "lolo": 5,
+          "low": 8,
+          "high": 25,
+          "hihi": 35
+        },
+        "notify": {
+          "name": "Dave",
+          "number": "46725722472",
+          "time": 0
+        }
+      }
+    },
+    {
+      "attr": "temp-B",
+      "type": "scalar",
+      "value": 10.687,
+      "unit": "C",
+      "alarm": {
+        "value": 0,
+        "limits": {
+          "lolo": 5,
+          "low": 6,
+          "high": 25,
+          "hihi": 35
+        },
+        "notify": {
+          "name": "Dave",
+          "number": "46725722472",
+          "time": 0
+        }
+      }
+    },
+    {
+      "attr": "linkQuality",
+      "type": "scalar",
+      "value": 56,
+      "unit": "/70",
+      "alarm": {
+        "value": 0,
+        "limits": {
+          "lolo": 30,
+          "low": 40,
+          "high": 71,
+          "hihi": 80
+        },
+        "notify": {
+          "name": "",
+          "number": "",
+          "time": 0
+        }
+      }
+    },
+    {
+      "attr": "signalLevel",
+      "type": "scalar",
+      "value": -54,
+      "unit": "dBm",
+      "alarm": {
+        "value": 0,
+        "limits": {
+          "lolo": -70,
+          "low": -60,
+          "high": 0,
+          "hihi": 30
+        },
+        "notify": {
+          "name": "",
+          "number": "",
+          "time": 0
+        }
+      }
+    }
+  ],
+  "settings": [
+    {
+      "attr": "temp-A-id",
+      "type": "string",
+      "value": "FD5779971003"
+    },
+    {
+      "attr": "temp-B-id",
+      "type": "string",
+      "value": "47B779971003"
+    }
+  ]
+}

@@ -160,7 +160,7 @@
         "wires": [
             [
                 "f3f3f15.081c31",
-                "5902d0c0.241a6"
+                "c01ae89f.f25478"
             ]
         ]
     },
@@ -574,6 +574,22 @@
             [
                 "cbf54b7.b4fdfb8",
                 "7fbb0296.3630ac"
+            ]
+        ]
+    },
+    {
+        "id": "c01ae89f.f25478",
+        "type": "function",
+        "z": "5f562f66.a301e",
+        "name": "Make Pretty",
+        "func": "var jsonPretty = JSON.stringify(msg.payload,null,2);\nreturn {topic: msg.payload, payload:jsonPretty};",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 450,
+        "y": 40,
+        "wires": [
+            [
+                "5902d0c0.241a6"
             ]
         ]
     }
